@@ -2,7 +2,7 @@ from functools import reduce
 
 x, y = map(
     lambda l: sorted(map(int, l)),
-    zip(*map(lambda x: x.strip().split(), open("./a.data").readlines())),
+    zip(*map(lambda x: x.strip().split(), open("./01.data").readlines())),
 )
 
 print(
