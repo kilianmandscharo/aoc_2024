@@ -15,9 +15,8 @@ def countValid(validationFunc):
 def isValidA(row):
     if row[0] == row[1]:
         return False
-    direction = "asc" if row[0] - row[1] < 0 else "desc"
     for i in range(0, len(row) - 1):
-        diff = row[i + 1] - row[i] if direction == "asc" else row[i] - row[i + 1]
+        diff = row[i + 1] - row[i] if row[0] - row[1] < 0 else row[i] - row[i + 1]
         if diff < 1 or diff > 3:
             return False
     return True
