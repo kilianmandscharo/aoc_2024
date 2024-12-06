@@ -37,47 +37,37 @@ def count_a(grid):
     return len(set(visited))
 
 
-def take_step_b(grid, position, direction, obstacles_hit, obstacles_hit_count):
+def take_step_b(grid, position, direction, obstacles_hit):
     new_position = (position[0] + direction[0], position[1] + direction[1])
     if is_oob(grid, new_position):
-        return None, direction
+        return None, direction, False
     if is_obstacle(grid, new_position):
         pos_and_dir = (position[0], position[1], direction[0], direction[1])
-        obstacles_hit.append(pos_and_dir)
-        if pos_and_dir in obstacles_hit_count:
-            obstacles_hit_count[pos_and_dir] += 1
-        else:
-            obstacles_hit_count[pos_and_dir] = 1
-        return position, (direction[1] * -1, direction[0])
-    return new_position, direction
+        if pos_and_dir in obstacles_hit:
+            return position, direction, True
+        obstacles_hit[pos_and_dir] = 1
+        return position, (direction[1] * -1, direction[0]), False
+    return new_position, direction, False
 
 
 def check_if_loop(grid):
     position = get_starting_position(grid)
     direction = (0, -1)
-    obstacles_hit = []
-    obstacles_hit_count = dict()
+    obstacles_hit = dict()
     while True:
         if position == None:
             return False
-        for i in range(len(obstacles_hit) - 4):
-            if (
-                obstacles_hit_count[obstacles_hit[i]] > 1
-                and obstacles_hit_count[obstacles_hit[i + 1]] > 1
-                and obstacles_hit_count[obstacles_hit[i + 2]] > 1
-                and obstacles_hit_count[obstacles_hit[i + 3]] > 1
-            ):
-                return True
-        position, direction = take_step_b(
-            grid, position, direction, obstacles_hit, obstacles_hit_count
+        position, direction, loop_found = take_step_b(
+            grid, position, direction, obstacles_hit
         )
+        if loop_found:
+            return True
 
 
 def count_b(grid):
     total = 0
     for y in range(len(grid)):
         for x in range(len(grid[0])):
-            print(x, y)
             if grid[y][x] == "^" or grid[y][x] == "#":
                 continue
             grid[y][x] = "#"
