@@ -56,6 +56,7 @@ def make_point_map(grid):
                 point_map[c] = [(x, y)]
     return point_map
 
+
 def count(grid, antinode_func):
     point_map = make_point_map(grid)
     antinodes = []
@@ -67,6 +68,7 @@ def count(grid, antinode_func):
                 new_antinodes = antinode_func(grid, a, b)
                 antinodes += new_antinodes
     return len(set(antinodes))
+
 
 grid = list(map(lambda l: [c for c in l.strip()], open("./08.data").readlines()))
 
